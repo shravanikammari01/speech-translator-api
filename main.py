@@ -7,7 +7,14 @@ from indic_transliteration import sanscript
 from indic_transliteration.sanscript import transliterate
 
 app = FastAPI()
-model = whisper.load_model("base")
+model = None
+
+def get_model():
+    global model
+    if model is None:
+        import whisper
+        model = whisper.load_model("tiny") 
+    return model
 
 def roman_to_telugu(text: str) -> str:
     try:
@@ -21,6 +28,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
         temp_audio.write(await file.read())
         temp_audio_path = temp_audio.name
 
+    model = get_model()
     result = model.transcribe(temp_audio_path)
     detected_text = result["text"].strip()
     detected_lang = result["language"]
@@ -51,3 +59,4 @@ async def transcribe_audio(file: UploadFile = File(...)):
         "english_text": english_text,
         "telugu_text": telugu_text
     }
+
