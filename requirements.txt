@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+openai-whisper
+torch
+transformers
+librosa
+soundfile
+python-multipart
+deep-translator
+indic-transliteration
